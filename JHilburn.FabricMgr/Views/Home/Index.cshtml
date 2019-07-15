@@ -1,0 +1,56 @@
+﻿@model JHilburn.FabricMgr.Models.FabricListViewModel
+
+<div class="text-center">
+    <h1 class="display-4">Fabric Manager</h1>
+</div>
+<div>
+    <a asp-action="AddNew" class="btn btn-outline-dark float-right mb-3" role="button">Add New Fabric</a>
+</div>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col" class="text-center border-right-0">SKU</th>
+            <th scope="col" class="border-right-0 border-left-0">Description</th>
+            <th scope="col" class="text-center border-right-0 border-left-0">Available Inventory</th>
+            <th scope="col" class="border-left-0"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var g in Model.Categories)
+        {
+            var dictionary = Model.GroupedFabrics.Where(gr => gr.Key == g).FirstOrDefault();
+            var list = dictionary.Value;
+            <tr class="table-secondary">
+                <th scope="col" colspan="4" class="text-uppercase text-center border-secondary">@dictionary.Key</th>
+            </tr>
+            foreach (var item in list)
+            {
+                <tr>
+                    <td class="text-center border-right-0">
+                        @item.sku
+                    </td>
+                    <td class="border-right-0 border-left-0">
+                        @Html.Raw(item.description)
+                    </td>
+                    <td class="text-center border-right-0 border-left-0">
+                        @item.inventory
+                    </td>
+                    <td class="border-left-0 text-center">
+                        <div class="dropdown show">
+                            <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Actions
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" asp-action="FabricDetail" asp-route-id="@item.id">View Details</a>
+                                <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.id">Delete Fabric</a>
+                                <a class="dropdown-item" href="#">Request Inventory</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
